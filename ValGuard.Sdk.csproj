@@ -14,4 +14,8 @@
     <RepositoryUrl>https://github.com/valguard-ai/sdk-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="ValGuard.Sdk.Tests/**" />
+    <None Remove="ValGuard.Sdk.Tests/**" />
+  </ItemGroup>
 </Project>
