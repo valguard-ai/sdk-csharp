@@ -6,17 +6,15 @@ Public GitHub: [github.com/valguard-ai/sdk-csharp](https://github.com/valguard-a
 
 ## Install
 
-From GitHub (until the package is on NuGet):
+```bash
+dotnet add package ValGuard.Sdk
+```
+
+From a GitHub clone (without NuGet):
 
 ```bash
 git clone https://github.com/valguard-ai/sdk-csharp.git
 dotnet add reference ./sdk-csharp/ValGuard.Sdk.csproj
-```
-
-After NuGet publish:
-
-```bash
-dotnet add package ValGuard.Sdk
 ```
 
 ## Environment

@@ -10,10 +10,16 @@
     <Description>OpenAI-compatible client helpers for the ValGuard integrity layer</Description>
     <PackageId>ValGuard.Sdk</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>valguard;llm;openai;validation;guardrails</PackageTags>
     <PackageProjectUrl>https://github.com/valguard-ai/sdk-csharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/valguard-ai/sdk-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Remove="ValGuard.Sdk.Tests/**" />
     <None Remove="ValGuard.Sdk.Tests/**" />
