@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ValGuard.Sdk</RootNamespace>
+    <AssemblyName>ValGuard.Sdk</AssemblyName>
+    <Version>0.2.0</Version>
+    <Authors>ValGuard</Authors>
+    <Description>OpenAI-compatible client helpers for the ValGuard integrity layer</Description>
+    <PackageId>ValGuard.Sdk</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/valguard-ai/sdk-csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/valguard-ai/sdk-csharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>
