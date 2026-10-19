@@ -37,3 +37,5 @@ Console.WriteLine(result.Validation);
 ```
 
 Pair with the official [OpenAI .NET SDK](https://github.com/openai/openai-dotnet) using headers from `BuildHeaders()`.
+
+`ValidationHeaders.Parse` reads repair, cache, trace, playbook approval, and license response headers. `WithApprovalMode("async")`, `WithIdempotencyKey`, and `WithTrace` set `X-VG-Approval-Mode`, `X-VG-Idempotency-Key`, `traceparent`, `X-VG-Parent-Span-Id`, and `X-VG-Agent-Id`. `EvidenceProof.VerifyEnvelope` checks a Proof JSON download offline with the deployment HMAC secret. Package version is 0.3.0.

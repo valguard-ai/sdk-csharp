@@ -41,6 +41,11 @@ public sealed class ValGuardClient
     private readonly string? _requestId;
     private readonly string? _internalSecret;
     private readonly string? _projectId;
+    private readonly string? _idempotencyKey;
+    private readonly string? _approvalMode;
+    private readonly string? _traceparent;
+    private readonly string? _parentSpanId;
+    private readonly string? _agentId;
     private readonly HttpClient _httpClient;
 
     private ValGuardClient(
@@ -52,6 +57,11 @@ public sealed class ValGuardClient
         string? requestId,
         string? internalSecret,
         string? projectId,
+        string? idempotencyKey,
+        string? approvalMode,
+        string? traceparent,
+        string? parentSpanId,
+        string? agentId,
         HttpClient httpClient)
     {
         _apiKey = apiKey;
@@ -62,6 +72,11 @@ public sealed class ValGuardClient
         _requestId = requestId;
         _internalSecret = internalSecret;
         _projectId = projectId;
+        _idempotencyKey = idempotencyKey;
+        _approvalMode = approvalMode;
+        _traceparent = traceparent;
+        _parentSpanId = parentSpanId;
+        _agentId = agentId;
         _httpClient = httpClient;
     }
 
@@ -98,14 +113,52 @@ public sealed class ValGuardClient
             null,
             string.IsNullOrWhiteSpace(internalSecret) ? null : internalSecret,
             string.IsNullOrWhiteSpace(projectId) ? null : projectId,
+            null,
+            null,
+            null,
+            null,
+            null,
             httpClient ?? new HttpClient());
     }
 
     public ValGuardClient WithAgent(string agentSlug) =>
-        new(_apiKey, _baseUrl, agentSlug, null, _providerKey, _requestId, _internalSecret, _projectId, _httpClient);
+        Copy(agentSlug, null, _idempotencyKey, _approvalMode, _traceparent, _parentSpanId, _agentId);
 
     public ValGuardClient WithPlaybook(string flowSlug) =>
-        new(_apiKey, _baseUrl, "", flowSlug, _providerKey, _requestId, _internalSecret, _projectId, _httpClient);
+        Copy("", flowSlug, _idempotencyKey, _approvalMode, _traceparent, _parentSpanId, _agentId);
+
+    public ValGuardClient WithIdempotencyKey(string idempotencyKey) =>
+        Copy(_agentSlug, _flowSlug, idempotencyKey, _approvalMode, _traceparent, _parentSpanId, _agentId);
+
+    public ValGuardClient WithApprovalMode(string approvalMode) =>
+        Copy(_agentSlug, _flowSlug, _idempotencyKey, approvalMode, _traceparent, _parentSpanId, _agentId);
+
+    public ValGuardClient WithTrace(string? traceparent, string? parentSpanId, string? agentId) =>
+        Copy(_agentSlug, _flowSlug, _idempotencyKey, _approvalMode, traceparent, parentSpanId, agentId);
+
+    private ValGuardClient Copy(
+        string agentSlug,
+        string? flowSlug,
+        string? idempotencyKey,
+        string? approvalMode,
+        string? traceparent,
+        string? parentSpanId,
+        string? agentId) =>
+        new(
+            _apiKey,
+            _baseUrl,
+            agentSlug,
+            flowSlug,
+            _providerKey,
+            _requestId,
+            _internalSecret,
+            _projectId,
+            idempotencyKey,
+            approvalMode,
+            traceparent,
+            parentSpanId,
+            agentId,
+            _httpClient);
 
     public Dictionary<string, string> BuildHeaders(IDictionary<string, string>? extra = null)
     {
@@ -132,6 +185,26 @@ public sealed class ValGuardClient
         if (!string.IsNullOrWhiteSpace(_requestId))
         {
             headers["X-Request-Id"] = _requestId;
+        }
+        if (!string.IsNullOrWhiteSpace(_idempotencyKey))
+        {
+            headers["X-VG-Idempotency-Key"] = _idempotencyKey;
+        }
+        if (!string.IsNullOrWhiteSpace(_approvalMode))
+        {
+            headers["X-VG-Approval-Mode"] = _approvalMode;
+        }
+        if (!string.IsNullOrWhiteSpace(_traceparent))
+        {
+            headers["traceparent"] = _traceparent;
+        }
+        if (!string.IsNullOrWhiteSpace(_parentSpanId))
+        {
+            headers["X-VG-Parent-Span-Id"] = _parentSpanId;
+        }
+        if (!string.IsNullOrWhiteSpace(_agentId))
+        {
+            headers["X-VG-Agent-Id"] = _agentId;
         }
         if (extra != null)
         {
