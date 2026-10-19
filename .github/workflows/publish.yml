@@ -1,0 +1,40 @@
+name: Publish to NuGet
+
+# Trusted Publishing on nuget.org exchanges this job's GitHub OIDC token
+# for a one-hour API key. The policy must name this file: publish.yml.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Pack ValGuard.Sdk
+        run: dotnet pack ValGuard.Sdk.csproj -c Release -o ./nupkg
+
+      # Profile name on nuget.org, the owner of ValGuard.Sdk. Not an email.
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: rbobrowski
+
+      - name: Push package
+        run: |
+          nupkg="$(ls ./nupkg/ValGuard.Sdk.*.nupkg | grep -v '\.symbols\.' | head -n1)"
+          dotnet nuget push "$nupkg" \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
